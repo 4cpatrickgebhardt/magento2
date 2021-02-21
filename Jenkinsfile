@@ -86,8 +86,7 @@ node('') {
             // Since we're catching the exception in order to report on it, we need to re-throw it, to ensure that the build is marked as failed
             throw e
         } finally {
-            notifyBitbucket()
-
+         
             if (currentBuild.result == 'SUCCESS') {
             //    slackSend(channel: slackRecipient, color: 'good', message: "*Pipeline-Name:* ${pipelineName} \n*Build-Nummer:* ${buildNumber} \n"
             //            + "*Branch-Name:* ${branchName}\n:white_check_mark: Pipeline finished (<${buildUrl}|Open>)")
