@@ -47,7 +47,7 @@ node('') {
 
                 echo "Spawning docker container..."
 
-                docker.image('docker-php-nginx:7.4').inside {
+                docker.image('localhost:5000/docker-php-nginx:7.4').inside {
                     stage('PHP Build') {
                         LAST_STAGE_NAME = env.STAGE_NAME
                         echo "Running PHP Build..."
@@ -86,7 +86,7 @@ node('') {
             // Since we're catching the exception in order to report on it, we need to re-throw it, to ensure that the build is marked as failed
             throw e
         } finally {
-         
+
             if (currentBuild.result == 'SUCCESS') {
             //    slackSend(channel: slackRecipient, color: 'good', message: "*Pipeline-Name:* ${pipelineName} \n*Build-Nummer:* ${buildNumber} \n"
             //            + "*Branch-Name:* ${branchName}\n:white_check_mark: Pipeline finished (<${buildUrl}|Open>)")
