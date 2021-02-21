@@ -42,6 +42,10 @@ node('') {
                                     sh "/usr/bin/7z x -y -p$PWO config-${buildEnv.toLowerCase()}.7z"
                                 }
 
+                withCredentials([string(credentialsId: "sevenZipPassword${buildEnv}"", variable: 'password')]) {
+                     sh "/usr/bin/7z x -y -p$password config-${buildEnv.toLowerCase()}.7z"
+                }
+
             }
 
                 echo "Spawning docker container..."
