@@ -38,6 +38,10 @@ node('') {
                 LAST_STAGE_NAME = env.STAGE_NAME
                 echo "Getting Config..."
 
+                withCredentials(bindings: [string(credentialsId: "sevenZipPassword${buildEnv}", variable: 'PWO')]) {
+                                    sh "/usr/bin/7z x -y -p$PWO config-${buildEnv.toLowerCase()}.7z"
+                                }
+
             }
 
                 echo "Spawning docker container..."
