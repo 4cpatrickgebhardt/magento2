@@ -40,7 +40,8 @@ node('') {
 
 
                 withCredentials([string(credentialsId: "sevenZipPassword${buildEnv}", variable: 'password')]) {
-                     sh "/usr/bin/7z x -y -p${password} config-${buildEnv.toLowerCase()}.7z"
+                 //    sh "/usr/bin/7z x -y -p ${password} config-${buildEnv.toLowerCase()}.7z"
+                     sh "/usr/bin/7z x -y  config-${buildEnv.toLowerCase()}.7z"
                 }
 
             }
