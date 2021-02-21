@@ -16,7 +16,7 @@ node('') {
 
         def TAG
         def buildEnv = ""
-        def helmEnv = ""
+        def kubEnv = "test-"
 
         def envServiceName = kubEnv + fullServiceName
 
@@ -45,36 +45,17 @@ node('') {
 
             }
 
-            docker.withRegistry('https://registry.dsp.atu.de:443/', 'docker_download') {
-                docker.image('atu_dev/docker-tools-php-npm:node-8.9.4').inside {
-                    stage('RM old dependencies') {
-                       sh '[ ! -e node_modules ] || sudo chown $USER:$USER node_modules'
-                       sh '[ ! -e package-lock.json ] || sudo chown $USER:$USER package-lock.json'
-                       sh "[ ! -e node_modules ] || sudo  rm -rf node_modules"
-                       sh "[ ! -e package-lock.json ] || sudo rm package-lock.json"
-                    }
-                }
-
                 echo "Spawning docker container..."
 
-                docker.image('atu_dev/docker-tools-php:master').inside {
+                docker.image('docker-php-nginx:7.4').inside {
                     stage('PHP Build') {
                         LAST_STAGE_NAME = env.STAGE_NAME
                         echo "Running PHP Build..."
                         sh 'composer install'
 
                     }
-                }
 
-                docker.image('atu_dev/docker-tools-php-npm:node-8.9.4').inside {
-                    stage('PHP Build-Step2') {
-                        LAST_STAGE_NAME = env.STAGE_NAME
-                        echo "Running PHP Build-Step2..."
-                        //sh 'sudo npm cache clean --force --unsafe-perm'
-                        sh "sudo PATH=$PATH:./node_modules/.bin npm install"
-
-                        sh 'sudo npm run build'
-
+                    stage('Create Artifact'){
                         def exists = fileExists 'release.tar.gz'
 
                         if (exists) {
@@ -83,8 +64,12 @@ node('') {
 
                         sh 'tar -zcvf release.tar.gz ./*'
                     }
+
                 }
-             }
+
+
+
+
 
 
             stage('Deployment') {

@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Docker | wyveo/nginx-php-fpm</title>
+  <title>Docker | geppii/docker-php-nginx</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
