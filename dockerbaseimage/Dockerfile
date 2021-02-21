@@ -63,6 +63,7 @@ RUN   apt-get install --no-install-recommends --no-install-suggests -q -y \
             php7.4-zip \
             php7.4-pgsql \
             php7.4-intl \
+            php7.4-soap  \
             php7.4-xml
 
 RUN   apt-get install --no-install-recommends --no-install-suggests -q -y \

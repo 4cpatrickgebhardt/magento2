@@ -1,0 +1,29 @@
+{
+  "dev":{
+    "deployment-path": [
+      "geppii@geppii.de:/home/geppii/magento/magento2/"
+    ],
+    "commands": [
+      "php bin/magento setup:di:compile",
+      "php bin/magento setup:upgrade"
+    ]
+  },
+  "stage":{
+    "deployment-path": [
+      "geppii@geppii.de:/home/geppii/magento/magento2/"
+    ],
+    "commands": [
+      "php bin/magento setup:di:compile",
+      "php bin/magento setup:upgrade"
+    ]
+  },
+  "prod":{
+    "deployment-path": [
+      "geppii@geppii.de:/home/geppii/magento/magento2/"
+    ],
+    "commands": [
+      "php bin/magento setup:di:compile",
+      "php bin/magento setup:upgrade"
+    ]
+  }
+}

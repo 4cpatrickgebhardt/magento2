@@ -139,7 +139,7 @@ password=`askPassword`
 if [[ "${mode}" == "ZIP" ]]
 then
     rm -f ${file}
-    7z a ${password} ${file} .env
+    7z a ${password} ${file} app/etc/env.php
 else
     7z x ${password} ${file}
 fi
