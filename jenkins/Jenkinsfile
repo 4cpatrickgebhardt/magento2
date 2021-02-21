@@ -69,7 +69,7 @@ node('') {
 
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
-                def deploymentConf = readJSON file: 'deployment.json'
+                def deploymentConf = readJSON file: 'jenkins/deployment.json'
                  for (destination in deploymentConf[buildEnv]['deployment-path']){
                     echo destination
                  }
