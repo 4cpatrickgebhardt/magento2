@@ -4,8 +4,8 @@
       "geppii@geppii.de:/home/geppii/magento/magento2/"
     ],
     "commands": [
-      "php bin/magento setup:di:compile",
-      "php bin/magento setup:upgrade"
+      "ssh geppii@geppii.de 'php /home/geppii/magento/magento2/bin/magento setup:di:compile'",
+      "ssh geppii@geppii.de 'php /home/geppii/magento/magento2/bin/magento setup:upgrade'"
     ]
   },
   "stage":{
