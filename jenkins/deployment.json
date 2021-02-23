@@ -8,8 +8,8 @@
           "user": "geppii",
           "path": "/home/geppii/magento/magento2/",
           "commands": [
-            "php /home/geppii/magento/magento2/bin/magento setup:di:compile",
-            "php /home/geppii/magento/magento2/bin/magento setup:upgrade"
+            "php /var/www/magento2/bin/magento setup:di:compile",
+            "php /var/www/magento2/bin/magento setup:upgrade"
           ]
         }
       ]
@@ -21,8 +21,8 @@
           "user": "geppii",
           "path": "/home/geppii/magento/magento2/",
           "commands": [
-            "php /home/geppii/magento/magento2/bin/magento setup:di:compile",
-            "php /home/geppii/magento/magento2/bin/magento setup:upgrade"
+            "php /var/www/magento2/bin/magento setup:di:compile",
+            "php /var/www/magento2/bin/magento setup:upgrade"
           ]
         }
       ]
