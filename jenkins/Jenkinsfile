@@ -80,7 +80,7 @@ node('') {
                 def destinations = deploymentConf['environments'][buildEnv]['destinations'];
                 for (destination in destinations) {
                     def path = destination['path']
-                    def sshUserHost destination['user'] + "@" + destination['host']
+                    def sshUserHost = destination['user'] + "@" + destination['host']
                     def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/"
 
                     echo "Copy the Release to ${user}@${host}:${copyPath}"
@@ -89,7 +89,7 @@ node('') {
 
                  for (destination in destinations) {
                      def commands = destination['commands']
-                     def sshUserHost destination['user'] + "@" + destination['host']
+                     def sshUserHost = destination['user'] + "@" + destination['host']
 
                      for (command in commands) {
                         echo "Execute ${command} on {sshUserHost}"
