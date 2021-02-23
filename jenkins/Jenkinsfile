@@ -18,22 +18,6 @@ node('') {
 
         def deploymentConf = readJSON file: 'jenkins/deployment.json'
 
-
-                        println deploymentConf['environments']
-                        println deploymentConf['environments']['dev']
-
-         def destinations2 = deploymentConf['environments']['dev']['destinations'];
-        for (destination2 in destinations2) {
-            def path2 = destination2['path']
-            def sshUserHost2 = destination2['user'] + "@" + destination2['host']
-            def copyPath2 = destination2['path'] + "../jenkinsrelease-${fullServiceName}/"
-
-            echo "Copy the Release to ${sshUserHost2}:${copyPath2}"
-
-        }
-
-        throw new Exception("Debug")
-
         // if branchname contains an url encoded slash, replace it with a slash
         pipelineName = pipelineName.replace('%2F', '/')
 
@@ -97,13 +81,13 @@ node('') {
                 println deploymentConf['environments']
                 println deploymentConf['environments'][buildEnv]
 
-                def destinations = deploymentConf['environments'][buildEnv]['destinations'];
+                def destinations = deploymentConf['environments'][buildEnv]['destinations']
                 for (destination in destinations) {
                     def path = destination['path']
                     def sshUserHost = destination['user'] + "@" + destination['host']
                     def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/"
 
-                    echo "Copy the Release to ${user}@${host}:${copyPath}"
+                    echo "Copy the Release to  ${sshUserHost}:${copyPath}"
                     sh "scp  release.tar.gz  ${sshUserHost}:${copyPath}"
                 }
 
@@ -117,6 +101,7 @@ node('') {
                      }
                  }
             }
+                       
         } catch (e) {
             echo "Throwing Exception \"${e}\" --- Pipeline was not successful!"
             // slackSend(channel: slackRecipient, color: '#FF0000', message: "*Pipeline-Name:* ${pipelineName} \n*Build-Nummer:* ${buildNumber} \n"
