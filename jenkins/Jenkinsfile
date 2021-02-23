@@ -28,7 +28,7 @@ node('') {
             def sshUserHost2 = destination2['user'] + "@" + destination2['host']
             def copyPath2 = destination2['path'] + "../jenkinsrelease-${fullServiceName}/"
 
-            echo "Copy the Release to ${user2}@${host2}:${copyPath2}"
+            echo "Copy the Release to ${sshUserHost2}:${copyPath2}"
 
         }
 
