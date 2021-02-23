@@ -81,27 +81,34 @@ node('') {
                 println deploymentConf['environments']
                 println deploymentConf['environments'][buildEnv]
 
+                def serverWorkDir = "/tmp/jenkinsrelease-${fullServiceName}/"
+
                 def destinations = deploymentConf['environments'][buildEnv]['destinations']
+
+                echo "Copy artifact to defined destinations and untar it to ${serverWorkDir}"
+
+                for (destination in destinations) {
+                    def sshUserHost = destination['user'] + "@" + destination['host']
+
+                    sh "ssh ${sshUserHost} ' mkdir -p ${serverWorkDir}'"
+                    sh "scp  release.tar.gz  ${sshUserHost}:${serverWorkDir}."
+                    sh "ssh  ${sshUserHost} 'tar -xzvf ${serverWorkDir}release.tar.gz -C ${serverWorkDir}release/'"
+                }
+
+                echo "Copy release from ${serverWorkDir} to the real destination and run the defined commands"
+
                 for (destination in destinations) {
                     def path = destination['path']
                     def sshUserHost = destination['user'] + "@" + destination['host']
-                    def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/"
 
-                    sh "ssh ${sshUserHost} ' mkdir -p ${copyPath}'"
-                    echo "Copy the Release to  ${sshUserHost}:${copyPath}"
-                    sh "scp  release.tar.gz  ${sshUserHost}:${copyPath}."
-                    sh "ssh  ${sshUserHost} 'tar -xzvf ${copyPath}release.tar.gz -C ${path}'"
+                    sh "ssh  ${sshUserHost} 'cp ${serverWorkDir}release/* ${path} '"
+
+                    def commands = destination['commands']
+
+                    for (command in commands) {
+                        sh "ssh ${sshUserHost} 'cd ${path} && ${command}'"
+                    }
                 }
-
-                 for (destination in destinations) {
-                     def commands = destination['commands']
-                     def sshUserHost = destination['user'] + "@" + destination['host']
-
-                     for (command in commands) {
-                        echo "Execute ${command} on {sshUserHost}"
-                        sh "ssh ${sshUserHost} ' ${command}'"
-                     }
-                 }
             }
 
         } catch (e) {
