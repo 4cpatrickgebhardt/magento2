@@ -22,14 +22,14 @@ node('') {
                         println deploymentConf['environments']
                         println deploymentConf['environments']['dev']
 
-         def destinations = deploymentConf['environments']['dev']['destinations'];
-        for (destination in destinations) {
-            def path = destination['path']
-            def sshUserHost = destination['user'] + "@" + destination['host']
-            def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/"
+         def destinations2 = deploymentConf['environments']['dev']['destinations'];
+        for (destination2 in destinations2) {
+            def path2 = destination2['path']
+            def sshUserHost2 = destination2['user'] + "@" + destination2['host']
+            def copyPath2 = destination2['path'] + "../jenkinsrelease-${fullServiceName}/"
 
-            echo "Copy the Release to ${user}@${host}:${copyPath}"
-           
+            echo "Copy the Release to ${user2}@${host2}:${copyPath2}"
+
         }
 
         throw new Exception("Debug")
