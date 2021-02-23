@@ -90,7 +90,7 @@ node('') {
                 for (destination in destinations) {
                     def sshUserHost = destination['user'] + "@" + destination['host']
 
-                    sh "ssh ${sshUserHost} ' mkdir -p ${serverWorkDir}'"
+                    sh "ssh ${sshUserHost} ' mkdir -p ${serverWorkDir}release/'"
                     sh "scp  release.tar.gz  ${sshUserHost}:${serverWorkDir}."
                     sh "ssh  ${sshUserHost} 'tar -xzvf ${serverWorkDir}release.tar.gz -C ${serverWorkDir}release/'"
                 }
