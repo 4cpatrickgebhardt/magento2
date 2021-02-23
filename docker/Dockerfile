@@ -3,7 +3,7 @@ FROM docker-php-nginx:7.4
 ARG APP_DIR=/var/www
 ARG BUILD_BRANCH=""
 ARG BUILD_REVISION=""
-ARG SERVICE_NAME="magento-test"
+ARG SERVICE_NAME="magento2"
 ARG SERVICE_VERSION="dev"
 
 
