@@ -18,6 +18,12 @@ node('') {
 
         def deploymentConf = readJSON file: 'jenkins/deployment.json'
 
+
+                        println deploymentConf['environments']
+                        println deploymentConf['environments']['dev']
+
+        throw new Exception("Debug")
+
         // if branchname contains an url encoded slash, replace it with a slash
         pipelineName = pipelineName.replace('%2F', '/')
 
@@ -77,7 +83,6 @@ node('') {
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
 
-                println destinations
 
                 println deploymentConf['environments']
                 println deploymentConf['environments'][buildEnv]
