@@ -1,5 +1,5 @@
 {
-  "baseimage": "localhost:5000/docker-php-nginx",
+  "buildimage": "localhost:5000/docker-php-nginx:7.4",
   "environments": {
     "dev": {
       "destinations": [

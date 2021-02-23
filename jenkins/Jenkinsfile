@@ -42,11 +42,10 @@ node('') {
             }
 
             echo 'Spawning docker container...'
-
-            docker.image('localhost:5000/docker-php-nginx:7.4').inside {
+            docker.image(deploymentConf.buildimage).inside {
                 stage('PHP Build') {
                     LAST_STAGE_NAME = env.STAGE_NAME
-                    echo 'Running PHP Build...'
+
                     def composer = fileExists 'composer.json'
                     if (composer){
                         echo 'Found composer.json.. running composer install'
@@ -56,6 +55,7 @@ node('') {
 
                 stage('JS Build') {
                     LAST_STAGE_NAME = env.STAGE_NAME
+
                     echo 'Running JS Build...'
                     def npm = fileExists 'package.json'
                     if (npm){
@@ -65,6 +65,7 @@ node('') {
                 }
 
                 stage('Create Artifact') {
+                    LAST_STAGE_NAME = env.STAGE_NAME
                     def release = fileExists 'release.tar.gz'
                     if (release) {
                         sh 'rm release.tar.gz'
@@ -76,7 +77,6 @@ node('') {
 
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
-
 
                 println deploymentConf['environments']
                 println deploymentConf['environments'][buildEnv]
