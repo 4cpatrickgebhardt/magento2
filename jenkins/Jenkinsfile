@@ -90,7 +90,7 @@ node('') {
                     sh "ssh ${sshUserHost} ' mkdir -p ${copyPath}'"
                     echo "Copy the Release to  ${sshUserHost}:${copyPath}"
                     sh "scp  release.tar.gz  ${sshUserHost}:${copyPath}."
-                    sh "ssh  ${sshUserHost} 'tar -xzvf ${copyPath}/release.tar.gz'"
+                    sh "ssh  ${sshUserHost} 'tar -xzvf ${copyPath}release.tar.gz ${path}'"
                 }
 
                  for (destination in destinations) {
