@@ -101,7 +101,7 @@ node('') {
                     def path = destination['path']
                     def sshUserHost = destination['user'] + "@" + destination['host']
 
-                    sh "ssh  ${sshUserHost} 'cp -r ${serverWorkDir}release/* ${path} && sudo chmod 776 && sudo chown www-data:www-data ${path}* -R'" //TODO!!!!
+                    sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  && cp -r ${serverWorkDir}release/* ${path} && sudo chown www-data:www-data ${path}* -R'" //TODO!!!!
 
                     def commands = destination['commands']
 
@@ -109,7 +109,7 @@ node('') {
                         sh "ssh ${sshUserHost} 'cd ${path} && ${command}'"
                     }
                     //TODO!!!
-                    sh "ssh  ${sshUserHost} 'sudo chmod 776 && sudo chown www-data:www-data ${path}* -R'"
+                    sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  && sudo chown www-data:www-data ${path}* -R'"
 
                 }
             }
