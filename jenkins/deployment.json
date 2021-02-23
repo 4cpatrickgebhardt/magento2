@@ -6,7 +6,7 @@
         {
           "host": "geppii.de",
           "user": "geppii",
-          "path": "/home/geppii/magento/magento2/",
+          "path": "/var/www/magento2/",
           "commands": [
             "php ./bin/magento setup:di:compile",
             "php ./bin/magento setup:upgrade"
@@ -19,7 +19,7 @@
         {
           "host": "geppii.de",
           "user": "geppii",
-          "path": "/home/geppii/magento/magento2/",
+          "path": "/var/www/magento2/",
           "commands": [
             "php ./bin/magento setup:di:compile",
             "php ./bin/magento setup:upgrade"
@@ -32,7 +32,7 @@
         {
           "host": "geppii.de",
           "user": "geppii",
-          "path": "/home/geppii/magento/magento2/",
+          "path": "/var/www/magento2/",
           "commands": [
             "php ./bin/magento setup:di:compile",
             "php ./bin/magento setup:upgrade"
