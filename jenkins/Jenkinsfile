@@ -77,6 +77,11 @@ node('') {
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
 
+                println destinations
+
+                println deploymentConf['environments']
+                println deploymentConf['environments'][buildEnv]
+
                 def destinations = deploymentConf['environments'][buildEnv]['destinations'];
                 for (destination in destinations) {
                     def path = destination['path']

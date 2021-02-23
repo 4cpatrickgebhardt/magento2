@@ -91,7 +91,6 @@ RUN mkdir -p /run/php \
     && sed -i -e "s/www-data/nginx/g" ${fpm_conf} \
     && sed -i -e "s/^;clear_env = no$/clear_env = no/" ${fpm_conf} \
     && echo "extension=redis.so" > /etc/php/7.4/mods-available/redis.ini \
-    && echo "extension=memcached.so" > /etc/php/7.4/mods-available/memcached.ini \
     && ln -sf /etc/php/7.4/mods-available/redis.ini /etc/php/7.4/fpm/conf.d/20-redis.ini \
     && ln -sf /etc/php/7.4/mods-available/redis.ini /etc/php/7.4/cli/conf.d/20-redis.ini \
     && ln -sf /etc/php/7.4/mods-available/memcached.ini /etc/php/7.4/fpm/conf.d/20-memcached.ini \
