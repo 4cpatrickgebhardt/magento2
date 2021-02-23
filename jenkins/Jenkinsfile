@@ -88,7 +88,7 @@ node('') {
                     def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/"
 
                     echo "Copy the Release to  ${sshUserHost}:${copyPath}"
-                    sh "scp  release.tar.gz  ${sshUserHost}:${copyPath}"
+                    sh "scp  release.tar.gz  ${sshUserHost}:${copyPath}."
                 }
 
                  for (destination in destinations) {
@@ -101,7 +101,7 @@ node('') {
                      }
                  }
             }
-                       
+
         } catch (e) {
             echo "Throwing Exception \"${e}\" --- Pipeline was not successful!"
             // slackSend(channel: slackRecipient, color: '#FF0000', message: "*Pipeline-Name:* ${pipelineName} \n*Build-Nummer:* ${buildNumber} \n"
