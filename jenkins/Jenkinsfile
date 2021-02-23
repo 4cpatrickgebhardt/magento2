@@ -1,11 +1,11 @@
-/* groovylint-disable NoDef, VariableTypeRequired */
+/* NoDef, VariableTypeRequired */
 def getWorkspace() {
     pwd().replace('%2F', '__')
 }
 
 node('') {
     ws(getWorkspace()) {
-        /* groovylint-disable-next-line NoDef */
+
         final pipelineName = env.JOB_NAME.replace('%2F', '/')
         final buildNumber = env.BUILD_DISPLAY_NAME
         final branchName = env.BRANCH_NAME
@@ -16,7 +16,11 @@ node('') {
 
         def LAST_STAGE_NAME = ''
 
-        def TAG
+        def deploymentConf = readJSON file: 'jenkins/deployment.json'
+
+        // if branchname contains an url encoded slash, replace it with a slash
+        pipelineName = pipelineName.replace('%2F', '/')
+
         def buildEnv = ''
 
         try {
@@ -25,9 +29,6 @@ node('') {
                 echo "Checking out ${branchName}..."
                 checkout scm
                 buildEnv = branchName.replace('master', 'prod').replace('develop', 'dev').replaceAll('release/.*', 'stage')
-
-                    // if branchname contains an url encoded slash, replace it with a slash
-                    pipelineName = pipelineName.replace('%2F', '/')
             }
 
             stage('Config') {
@@ -43,29 +44,55 @@ node('') {
             echo 'Spawning docker container...'
 
             docker.image('localhost:5000/docker-php-nginx:7.4').inside {
-                    stage('PHP Build') {
-                        LAST_STAGE_NAME = env.STAGE_NAME
-                        echo 'Running PHP Build...'
+                stage('PHP Build') {
+                    LAST_STAGE_NAME = env.STAGE_NAME
+                    echo 'Running PHP Build...'
+                    if (fileExists 'composer.json'){
+                        echo 'Found composer.json.. running composer install'
                         sh 'composer install'
                     }
+                }
 
-                    stage('Create Artifact') {
-                        def exists = fileExists 'release.tar.gz'
-
-                        if (exists) {
-                            sh 'rm release.tar.gz'
-                        }
-
-                        sh 'tar -zcvf release.tar.gz ./*'
+                stage('JS Build') {
+                    LAST_STAGE_NAME = env.STAGE_NAME
+                    echo 'Running JS Build...'
+                    if (fileExists 'package.json'){
+                        echo 'Found package.json.. running npm install'
+                        sh 'npm install'
                     }
+                }
+
+                stage('Create Artifact') {
+                    if (fileExists 'release.tar.gz') {
+                        sh 'rm release.tar.gz'
+                    }
+
+                    sh 'tar -zcvf release.tar.gz ./*'
+                }
             }
 
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
-                def deploymentConf = readJSON file: 'jenkins/deployment.json'
-                for (destination in deploymentConf[buildEnv]['deployment-path']) {
-                    sh "scp  release.tar.gz  ${destination}"
+
+                def destinations = deploymentConf['environments'][buildEnv]['destinations'];
+                for (destination in destinations) {
+                    def path = destination['path'];
+                    def sshUserHost destination['user'] + "@" + destination['host']
+                    def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/";
+
+                    echo "Copy the Release to ${user}@${host}:${copyPath}"
+                    sh "scp  release.tar.gz  ${sshUserHost}:${copyPath}"
                 }
+
+                 for (destination in destinations) {
+                     def commands = destination['commands'];
+                     def sshUserHost destination['user'] + "@" + destination['host']
+
+                     for (command in commands) {
+                        echo "Execute ${command} on {sshUserHost}"
+                        sh "ssh ${sshUserHost} ' ${command}'"
+                     }
+                 }
             }
         } catch (e) {
             echo "Throwing Exception \"${e}\" --- Pipeline was not successful!"
