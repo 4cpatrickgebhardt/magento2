@@ -22,6 +22,16 @@ node('') {
                         println deploymentConf['environments']
                         println deploymentConf['environments']['dev']
 
+         def destinations = deploymentConf['environments']['dev']['destinations'];
+        for (destination in destinations) {
+            def path = destination['path']
+            def sshUserHost = destination['user'] + "@" + destination['host']
+            def copyPath = destination['path'] + "../jenkinsrelease-${fullServiceName}/"
+
+            echo "Copy the Release to ${user}@${host}:${copyPath}"
+           
+        }
+
         throw new Exception("Debug")
 
         // if branchname contains an url encoded slash, replace it with a slash
