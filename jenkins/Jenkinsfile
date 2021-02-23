@@ -47,7 +47,8 @@ node('') {
                 stage('PHP Build') {
                     LAST_STAGE_NAME = env.STAGE_NAME
                     echo 'Running PHP Build...'
-                    if (fileExists 'composer.json'){
+                    def composer = fileExists 'composer.json'
+                    if (composer){
                         echo 'Found composer.json.. running composer install'
                         sh 'composer install'
                     }
@@ -56,14 +57,16 @@ node('') {
                 stage('JS Build') {
                     LAST_STAGE_NAME = env.STAGE_NAME
                     echo 'Running JS Build...'
-                    if (fileExists 'package.json'){
+                    def npm = fileExists 'package.json'
+                    if (npm){
                         echo 'Found package.json.. running npm install'
                         sh 'npm install'
                     }
                 }
 
                 stage('Create Artifact') {
-                    if (fileExists 'release.tar.gz') {
+                    def release = fileExists 'release.tar.gz'
+                    if (release) {
                         sh 'rm release.tar.gz'
                     }
 
