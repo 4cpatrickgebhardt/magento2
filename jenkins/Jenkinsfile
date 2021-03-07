@@ -134,7 +134,7 @@ node('') {
                     //commandConf[cmd]['groups'].containsValue(destination['group']) geht nicht
                         if(commandConf[cmd] ){
 
-                            for(group in commandConf[cmd]['groups']) ){
+                            for(group in commandConf[cmd]['groups'] ){
                                 if(group = destination['group']){
                                     echo 'runnind command '
                                     echo commandConf[cmd]['command']
