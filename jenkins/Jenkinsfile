@@ -17,6 +17,7 @@ node('') {
         def LAST_STAGE_NAME = ''
 
         def deploymentConf = readJSON file: 'jenkins/deployment.json'
+        def commandConf = readJSON file: 'jenkins/commands.json'
 
         // if branchname contains an url encoded slash, replace it with a slash
         pipelineName = pipelineName.replace('%2F', '/')
@@ -31,24 +32,15 @@ node('') {
                 buildEnv = branchName.replace('master', 'prod').replace('develop', 'dev').replaceAll('release/.*', 'stage')
             }
 
-            stage('Parse Commit'){
+            stage('Parse Commit and Commands'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
-
                 tmpCommit = commit.split("cmd:")
-//cmd:sedico: cmd:seup:
 
                 cmdToRun = []
 
                 for (cm in tmpCommit){
-
                     cmd = cm.split(":")
-
-                    echo cmd[0]
                     cmdToRun.push(cmd[0])
-                }
-
-                for (dbg  in cmdToRun){
-                    echo dbg
                 }
             }
 
@@ -106,8 +98,6 @@ node('') {
                     LAST_STAGE_NAME = env.STAGE_NAME
 
 
-
-
                 }
 
             stage('Deployment') {
@@ -138,9 +128,12 @@ node('') {
 
                     sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  &&  sudo cp -r ${serverWorkDir}release/* ${path} && sudo chown www-data:www-data ${path}* -R'" //TODO!!!!
 
-                    def commands = destination['commands']
 
-                    for (command in commands) {
+                    for (cmd in cmdToRun) {
+                        if(commandConf[cmd] && commandConf[cmd]['groups'].containsValue(destination['group']){
+                            echo 'runnind command '
+                            echo commandConf[cmd]['command']
+                        }
                         sh "ssh ${sshUserHost} 'cd ${path} && ${command}'"
                     }
                     //TODO!!!
