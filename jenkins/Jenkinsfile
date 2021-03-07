@@ -44,6 +44,7 @@ node('') {
 
                     cmd = cm.split(":")
 
+                    echo cmd[0]
                     cmdToRun[] = cmd[0]
                 }
 
