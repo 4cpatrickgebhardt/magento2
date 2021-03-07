@@ -31,18 +31,24 @@ node('') {
                 buildEnv = branchName.replace('master', 'prod').replace('develop', 'dev').replaceAll('release/.*', 'stage')
             }
 
-            stage('Config') {
-                LAST_STAGE_NAME = env.STAGE_NAME
-                echo "Getting Config for ${buildEnv}..."
-
-                withCredentials([string(credentialsId: "sevenZipPassword${buildEnv}", variable: 'password')]) {
-                    //    sh "/usr/bin/7z x -y -p ${password} config-${buildEnv.toLowerCase()}.7z"
-                    sh "/usr/bin/7z x -y  config-${buildEnv.toLowerCase()}.7z"
-                }
+            stage('Parse Commit'){
+                commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
+                commitCommands = commit.split("cmd:");
+                echo commitCommands
             }
 
             echo 'Spawning docker container...'
             docker.image(deploymentConf.buildimage).inside {
+                stage('PHP Build') {
+                    LAST_STAGE_NAME = env.STAGE_NAME
+
+                    def composer = fileExists 'composer.json'
+                    if (composer){
+                        echo 'Found composer.json.. running composer install'
+                        sh 'composer install'
+                    }
+                }
+
                 stage('PHP Build') {
                     LAST_STAGE_NAME = env.STAGE_NAME
 
@@ -64,6 +70,12 @@ node('') {
                     }
                 }
 
+                stage('Apply Hotfixes') {
+                    LAST_STAGE_NAME = env.STAGE_NAME
+                    sh 'echo TODO :)'
+                }
+
+
                 stage('Create Artifact') {
                     LAST_STAGE_NAME = env.STAGE_NAME
                     def release = fileExists 'release.tar.gz'
@@ -74,6 +86,14 @@ node('') {
                     sh 'tar -zcvf release.tar.gz ./*'
                 }
             }
+
+                stage('Config') {
+                    LAST_STAGE_NAME = env.STAGE_NAME
+
+
+
+
+                }
 
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
