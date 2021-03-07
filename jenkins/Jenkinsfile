@@ -131,7 +131,7 @@ node('') {
 
 //cmd:m2sedico:
                     for (cmd in cmdToRun) {
-                        if(commandConf[cmd] && commandConf[cmd]['groups'].containsValue(destination['group']){
+                        if(commandConf[cmd] && commandConf[cmd]['groups'].containsValue(destination['group'])){
                             echo 'runnind command '
                             echo commandConf[cmd]['command']
                         }
