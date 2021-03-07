@@ -90,11 +90,12 @@ node('') {
                 }
             }
 
-                stage('Config') {
-                    LAST_STAGE_NAME = env.STAGE_NAME
-
-
+            stage('Prepare Config'){
+              echo "Decrypt Vault"
+                withCredentials(bindings: [string(credentialsId: "vaultpassword", variable: 'password')]) {
+                    sh '7z x -y ${password} jenkins/configs/vault.7z jenkins/configs/vault/'
                 }
+            }
 
             stage('Deployment') {
                 LAST_STAGE_NAME = env.STAGE_NAME
@@ -110,11 +111,18 @@ node('') {
 
                 for (destination in destinations) {
                     def sshUserHost = destination['user'] + "@" + destination['host']
-
+                    def config = destination['config']
                     sh "ssh ${sshUserHost} ' mkdir -p ${serverWorkDir}release/'"
                     sh "scp  release.tar.gz  ${sshUserHost}:${serverWorkDir}."
                     sh "ssh  ${sshUserHost} 'tar -xzvf ${serverWorkDir}release.tar.gz -C ${serverWorkDir}release/'"
+
+                    echo "Apply config"
+                    ssh "scp  jenkins/configs/vault/${config}  ${sshUserHost}:${serverWorkDir}."
+
                 }
+
+
+
 
                 echo "Copy release from ${serverWorkDir} to the real destination and run the defined commands"
 
@@ -123,6 +131,9 @@ node('') {
                     def sshUserHost = destination['user'] + "@" + destination['host']
 
                     sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  &&  sudo cp -r ${serverWorkDir}release/* ${path} && sudo chown www-data:www-data ${path}* -R'" //TODO!!!!
+
+
+
 
 //cmd:m2sedico:
                     for (cmd in cmdToRun) {
