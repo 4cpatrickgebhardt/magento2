@@ -1,14 +1,14 @@
 {
   "m2sedico": {
-    "command": "m2 setup:di:compile",
+    "command": "php bin/magento setup:di:compile",
     "groups": ["web","command"]
   },
   "m2seup": {
-    "command": "m2 setup:upgrade",
+    "command": "php bin/magento setup:upgrade",
     "groups": ["web","command"]
   },
   "m2stcode": {
-    "command": "m2 static:contet:deploy usw bla bla bla",
+    "command": "php bin/magento static:contet:deploy usw bla bla bla",
     "groups": ["web"]
   }
 }
