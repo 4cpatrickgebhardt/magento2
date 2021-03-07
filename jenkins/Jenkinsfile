@@ -69,9 +69,13 @@ node('') {
                     }
                 }
 
-                stage('Apply Hotfixes') {
-                    LAST_STAGE_NAME = env.STAGE_NAME
-                    echo 'Todo :) '
+
+                def hotfixes = fileExists 'hotfixes/'
+                if (hotfixes) {
+                    stage('Apply Hotfixes') {
+                        LAST_STAGE_NAME = env.STAGE_NAME
+                        sh 'cp -rf hotfixes/* ./'
+                    }
                 }
 
 
@@ -122,7 +126,7 @@ node('') {
 
 //cmd:m2sedico:
                     for (cmd in cmdToRun) {
-                    //commandConf[cmd]['groups'].containsValue(destination['group']) geht nicht
+                    //commandConf[cmd]['groups'].containsValue(destination['group']) geht nicht deswegen forschleife -.-
                         if(commandConf[cmd] ){
 
                             for(group in commandConf[cmd]['groups'] ){
