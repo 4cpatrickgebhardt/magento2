@@ -34,7 +34,10 @@ node('') {
             stage('Parse Commit'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
                 commitCommands = commit.split("cmd:");
-                echo commitCommands
+                for(commitCommand in commitCommands ){
+                  echo commitCommand
+                }
+
             }
 
             echo 'Spawning docker container...'
