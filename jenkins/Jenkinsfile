@@ -33,6 +33,8 @@ node('') {
 
             stage('Parse Commit'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
+
+                echo commit
                 tmpCommit = commit.split("»")
 
                 cmdToRun = []
