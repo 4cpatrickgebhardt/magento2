@@ -57,15 +57,6 @@ node('') {
                     }
                 }
 
-                stage('PHP Build') {
-                    LAST_STAGE_NAME = env.STAGE_NAME
-
-                    def composer = fileExists 'composer.json'
-                    if (composer){
-                        echo 'Found composer.json.. running composer install'
-                        sh 'composer install'
-                    }
-                }
 
                 stage('JS Build') {
                     LAST_STAGE_NAME = env.STAGE_NAME
@@ -136,17 +127,13 @@ node('') {
 
                             for(group in commandConf[cmd]['groups'] ){
                                 if(group == destination['group']){
-                                    echo 'runnind command '
-                                    echo commandConf[cmd]['command']
+                                    sh "ssh  ${sshUserHost} 'cd ${path} &&  ${commandConf[cmd]['command']} '"
                                 }
                             }
-
                         }
-                      //  sh "ssh ${sshUserHost} 'cd ${path} && ${command}'"
                     }
                     //TODO!!!
                     sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  && sudo chown www-data:www-data ${path}* -R'"
-
                 }
             }
 
