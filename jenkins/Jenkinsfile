@@ -37,7 +37,7 @@ node('') {
 
                 tmpCommit = commit.split("»")
 //»sedico« »seup«
-                 echo tmpCommit.length
+                 echo ${tmpCommit.length}
                 cmdToRun = []
 
                 for (cm in tmpCommit){
