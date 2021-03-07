@@ -35,14 +35,14 @@ node('') {
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
 
 
-                tmpCommit = commit.split("»")
-//»sedico« »seup«
-                 echo ${tmpCommit.length}
+                tmpCommit = commit.split("cmd:")
+//cmd:sedico: cmd:seup:
+
                 cmdToRun = []
 
                 for (cm in tmpCommit){
 
-                    cmd = cm.split("«")
+                    cmd = cm.split(":")
 
                     cmdToRun[] = cmd[0]
                 }
