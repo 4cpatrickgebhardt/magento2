@@ -34,7 +34,6 @@ node('') {
             stage('Parse Commit'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
 
-
                 tmpCommit = commit.split("cmd:")
 //cmd:sedico: cmd:seup:
 
