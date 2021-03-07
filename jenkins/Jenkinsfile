@@ -135,7 +135,7 @@ node('') {
                         if(commandConf[cmd] ){
 
                             for(group in commandConf[cmd]['groups'] ){
-                                if(group = destination['group']){
+                                if(group == destination['group']){
                                     echo 'runnind command '
                                     echo commandConf[cmd]['command']
                                 }
