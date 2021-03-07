@@ -33,9 +33,10 @@ node('') {
 
             stage('Parse Commit'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
-                commitCommands = commit.split("cmd:");
+                commitCommands = commit.split("cmd:")
                 for(commitCommand in commitCommands ){
-                  echo commitCommand
+                  commitCommands[commitCommand.key] = commitCommand.value.trim()
+                  echo commitCommands[commitCommand.key]
                 }
 
             }
