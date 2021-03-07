@@ -33,12 +33,20 @@ node('') {
 
             stage('Parse Commit'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
-                commitCommands = commit.split("cmd:")
-                for(commitCommand in commitCommands ){
-                  commitCommands[commitCommand.key] = commitCommand.value.trim()
-                  echo commitCommands[commitCommand.key]
+                tmpCommit = commit.split("»")
+
+                cmdToRun = []
+
+                for (cm in tmpCommit){
+
+                    cmd = cm.split("«")
+
+                    cmdToRun[] = cmd[0]
                 }
 
+                for (dbg  in cmdToRun){
+                    echo dbg
+                }
             }
 
             echo 'Spawning docker container...'
@@ -76,7 +84,7 @@ node('') {
 
                 stage('Apply Hotfixes') {
                     LAST_STAGE_NAME = env.STAGE_NAME
-                    sh 'echo TODO :)'
+                    echo 'Todo :) '
                 }
 
 
