@@ -32,6 +32,7 @@ node('') {
                 buildEnv = branchName.replace('master', 'prod').replace('develop', 'dev').replaceAll('release/.*', 'stage')
             }
 
+//cmd:m2sedico:
             stage('Parse Commit and Commands'){
                 commit = sh(returnStdout: true, script: 'git log -1 --oneline').trim()
                 tmpCommit = commit.split("cmd:")
@@ -128,13 +129,13 @@ node('') {
 
                     sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  &&  sudo cp -r ${serverWorkDir}release/* ${path} && sudo chown www-data:www-data ${path}* -R'" //TODO!!!!
 
-
+//cmd:m2sedico:
                     for (cmd in cmdToRun) {
                         if(commandConf[cmd] && commandConf[cmd]['groups'].containsValue(destination['group']){
                             echo 'runnind command '
                             echo commandConf[cmd]['command']
                         }
-                        sh "ssh ${sshUserHost} 'cd ${path} && ${command}'"
+                      //  sh "ssh ${sshUserHost} 'cd ${path} && ${command}'"
                     }
                     //TODO!!!
                     sh "ssh  ${sshUserHost} 'sudo chmod 776 ${path}*  && sudo chown www-data:www-data ${path}* -R'"
